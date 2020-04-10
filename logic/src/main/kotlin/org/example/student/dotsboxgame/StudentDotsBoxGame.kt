@@ -7,19 +7,18 @@ import uk.ac.bournemouth.ap.dotsandboxeslib.matrix.MutableSparseMatrix
 import uk.ac.bournemouth.ap.dotsandboxeslib.matrix.SparseMatrix
 import kotlin.random.Random
 
-class StudentDotsBoxGame : AbstractDotsAndBoxesGame() {
-    override val players: List<Player> = TODO("You will need to get players from your constructor")
+class StudentDotsBoxGame(columns: Int, rows: Int, players: List<Player>) : AbstractDotsAndBoxesGame() {
+    override val players: List<Player> = players
 
-    override val currentPlayer: Player get()= TODO("Determine the current player, like keeping" +
-                                                           "the index into the players list")
+    override val currentPlayer: Player get()= players[0]
 
     // NOTE: you may want to me more specific in the box type if you use that type in your class
-    override val boxes: Matrix<DotsAndBoxesGame.Box> = TODO("Create a matrix initialized with your own box type")
+    override val boxes: Matrix<DotsAndBoxesGame.Box> = MutableMatrix(columns, rows, ::StudentBox)//TODO("Create a matrix initialized with your own box type")
 
-    override val lines: SparseMatrix<DotsAndBoxesGame.Line> = TODO("Create a matrix initialized with your own line type")
+    override val lines: SparseMatrix<DotsAndBoxesGame.Line> = MutableSparseMatrix(rows, columns, ::StudentLine)//TODO("Create a matrix initialized with your own line type")
 
     override val isFinished: Boolean
-        get() = TODO("Provide this getter. Note you can make it a var to do so")
+        get() = isFinished//TODO("Provide this getter. Note you can make it a var to do so")
 
     override fun playComputerTurns() {
         var current = currentPlayer
