@@ -21,7 +21,7 @@ class GameView:View {
     init {
         mBackgroundPaint = Paint().apply {
             style = Paint.Style.FILL
-            color = Color.BLUE
+            color = Color.BLACK
         }
         mNoPlayerPaint = Paint().apply {
             style = Paint.Style.FILL
@@ -41,24 +41,31 @@ class GameView:View {
         super.onDraw(canvas)
 
         val chosenWidth: Float
-        val chosenHeight: Float
         var paint: Paint
+        val gridSize = 8//TODO change for actual assignment
 
         val viewWidth: Float = width.toFloat()
-        chosenWidth = ((viewWidth-35)/8) - 35 //TODO replace 8 with var
+        chosenWidth = ((viewWidth - (1+gridSize)*10)-70)/gridSize
         val viewHeight: Float = height.toFloat()
-        chosenHeight = viewHeight/8 //TODO replace 8 with var
 
         canvas.drawRect(0.toFloat(), 0.toFloat(), viewWidth, viewHeight, mBackgroundPaint)
 
-        //draw horizontal lines
-        for (col in 0 until 8) {  //TODO replace 8 with var
-            for (row in 0 until 8) { //TODO replace 8 with var
+        for (col in 0 until gridSize + 1) {
+            for (row in 0 until gridSize) {
                 paint = mNoPlayerPaint
-                var left = chosenWidth * row + (35*row) + 35
-                var right = chosenWidth + left
-                canvas.drawRect(left.toFloat(), 5.toFloat(), right.toFloat(), 10.toFloat(), paint)
-                //canvas.drawRect(left.toFloat(), 5.toFloat(), 5.toFloat(), left.toFloat(), paint)
+                //draw vertical lines
+                var verticalTop = 45 + ((chosenWidth+10) * row)
+                var verticalBottom = chosenWidth + verticalTop
+                var verticalLeft = (chosenWidth * col) + 35 + 10*col - 10
+                var verticalRight = verticalLeft + 10
+                canvas.drawRect(verticalLeft,verticalTop,verticalRight,verticalBottom, paint)
+                //draw horizontal lines
+                var horizontalLeft = (chosenWidth + 10) * row + 35
+                var horizontalRight = chosenWidth + horizontalLeft
+                var horizontalTop = chosenWidth * col + 35 + (col*10)
+                var horizontalBottom = horizontalTop + 10
+                canvas.drawRect(horizontalLeft, horizontalTop, horizontalRight, horizontalBottom, paint)
+
             }
         }
     }
