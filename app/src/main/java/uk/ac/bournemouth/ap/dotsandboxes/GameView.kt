@@ -42,30 +42,36 @@ class GameView:View {
 
         val chosenWidth: Float
         var paint: Paint
-        val gridSize = 8//TODO change for actual assignment
+        val cols = 5//TODO change for actual assignment
+        var rows = 8
 
         val viewWidth: Float = width.toFloat()
-        chosenWidth = ((viewWidth - (1+gridSize)*10)-70)/gridSize
+        chosenWidth = ((viewWidth - (1+cols)*10)-70)/cols
         val viewHeight: Float = height.toFloat()
 
         canvas.drawRect(0.toFloat(), 0.toFloat(), viewWidth, viewHeight, mBackgroundPaint)
 
-        for (col in 0 until gridSize + 1) {
-            for (row in 0 until gridSize) {
+        //draw horizontal lines
+        for (row in 0 until rows+1) {
+            var horizontalTop = chosenWidth * row + 35 + (row*10)
+            var horizontalBottom = horizontalTop + 10
+            for (col in 0 until cols) {
                 paint = mNoPlayerPaint
-                //draw vertical lines
-                var verticalTop = 45 + ((chosenWidth+10) * row)
-                var verticalBottom = chosenWidth + verticalTop
-                var verticalLeft = (chosenWidth * col) + 35 + 10*col - 10
-                var verticalRight = verticalLeft + 10
-                canvas.drawRect(verticalLeft,verticalTop,verticalRight,verticalBottom, paint)
-                //draw horizontal lines
-                var horizontalLeft = (chosenWidth + 10) * row + 35
+                var horizontalLeft = (chosenWidth + 10) * col + 35
                 var horizontalRight = chosenWidth + horizontalLeft
-                var horizontalTop = chosenWidth * col + 35 + (col*10)
-                var horizontalBottom = horizontalTop + 10
                 canvas.drawRect(horizontalLeft, horizontalTop, horizontalRight, horizontalBottom, paint)
+            }
+        }
 
+        //draw vertical lines
+        for (row in 0 until rows){
+            var verticalTop = 45+((chosenWidth+10)*row)
+            var verticalBottom = verticalTop + chosenWidth
+            for (col in 0 until cols+1) {
+                paint = mNoPlayerPaint
+                var verticalLeft = 25 + ((chosenWidth+10)*col)
+                var verticalRight = verticalLeft + 10
+                canvas.drawRect(verticalLeft,verticalTop,verticalRight,verticalBottom,paint)
             }
         }
     }
