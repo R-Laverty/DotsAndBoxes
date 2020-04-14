@@ -7,8 +7,12 @@ import uk.ac.bournemouth.ap.dotsandboxeslib.matrix.MutableSparseMatrix
 import uk.ac.bournemouth.ap.dotsandboxeslib.matrix.SparseMatrix
 import kotlin.random.Random
 
-class StudentDotsBoxGame(columns: Int = 8, rows: Int = 8, players: List<Player>) : AbstractDotsAndBoxesGame() {
+
+class StudentDotsBoxGame(columns: Int = 8, rows: Int = 8, players: List<Player> =
+    listOf(HumanPlayer(), HumanPlayer())) : AbstractDotsAndBoxesGame() {
     override val players: List<Player> = players
+    val mColumns: Int = columns
+    val mRows:Int = rows
 
     override val currentPlayer: Player get()= players[0]
 
