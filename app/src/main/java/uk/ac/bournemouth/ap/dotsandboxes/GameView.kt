@@ -16,7 +16,7 @@ class GameView:View {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :
             super(context, attrs, defStyleAttr)
 
-    private var mStudentDotsBoxGame: StudentDotsBoxGame = StudentDotsBoxGame()
+    private var mStudentDotsBoxGame: StudentDotsBoxGame = StudentDotsBoxGame(8,8)
     private val colCount = mStudentDotsBoxGame.mColumns
     private val rowCount = mStudentDotsBoxGame.mRows
 
@@ -58,7 +58,7 @@ class GameView:View {
         var paint: Paint
 
         val viewWidth: Float = width.toFloat()
-        chosenLineWidth = ((viewWidth - (1+colCount)*10)-70)/colCount
+        chosenLineWidth = ((viewWidth - (1+colCount)*10))/colCount
         val viewHeight: Float = height.toFloat()
 
         canvas.drawRect(0.toFloat(), 0.toFloat(), viewWidth, viewHeight, mBackgroundPaint)
@@ -68,9 +68,9 @@ class GameView:View {
                 //Draw horizontal lines
                 for (col in 0 until colCount) {
                     paint = mLineNotDrawnPaint
-                    var horizontalLineTop = chosenLineWidth * (row/2) + 35 + ((row/2)*10)
+                    var horizontalLineTop = chosenLineWidth * (row/2) + ((row/2)*10)
                     var horizontalLineBottom = horizontalLineTop + 10
-                    var horizontalLineLeft = (chosenLineWidth + 10) * col + 35
+                    var horizontalLineLeft = 10 + (chosenLineWidth + 10) * col
                     var horizontalLineRight = chosenLineWidth + horizontalLineLeft
                     canvas.drawRect(horizontalLineLeft, horizontalLineTop, horizontalLineRight,
                                     horizontalLineBottom, paint)
@@ -79,9 +79,9 @@ class GameView:View {
                 //Draw vertical lines
                 for (col in 0 until colCount+1) {
                     paint = mLineNotDrawnPaint
-                    var verticalLineTop = 45+((chosenLineWidth+10)*(row/2))
+                    var verticalLineTop = 10+((chosenLineWidth+10)*(row/2))
                     var verticalLineBottom = verticalLineTop + chosenLineWidth
-                    var verticalLineLeft = 25 + ((chosenLineWidth+10)*col)
+                    var verticalLineLeft = ((chosenLineWidth+10)*col)
                     var verticalLineRight = verticalLineLeft + 10
                     canvas.drawRect(verticalLineLeft, verticalLineTop, verticalLineRight,
                                     verticalLineBottom, paint)

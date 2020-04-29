@@ -13,8 +13,10 @@ class StudentDotsBoxGame(columns: Int = 8, rows: Int = 8, players: List<Player> 
     override val players: List<Player> = players
     val mColumns: Int = columns
     val mRows:Int = rows
+    var turn:Int = 0
 
-    override val currentPlayer: Player get()= players[0]
+    override var currentPlayer: Player = players[0]
+        get()= players[0]
 
     // NOTE: you may want to me more specific in the box type if you use that type in your class
     override val boxes: Matrix<DotsAndBoxesGame.Box> = MutableMatrix(columns, rows, ::StudentBox)//TODO("Create a matrix initialized with your own box type")
@@ -38,18 +40,33 @@ class StudentDotsBoxGame(columns: Int = 8, rows: Int = 8, players: List<Player> 
      * it being an inner class.
      */
     inner class StudentLine(lineX: Int, lineY: Int) : AbstractLine(lineX, lineY) {
-        override val isDrawn: Boolean
-            get() = TODO("Provide this getter. Note you can make it a var to do so")
+        override var isDrawn: Boolean = false
+            get() = this.isDrawn//TODO("Provide this getter. Note you can make it a var to do so")
 
 
         override val adjacentBoxes: Pair<StudentBox?, StudentBox?>
             get() {
-                TODO("You need to look up the correct boxes for this to work")
+                //TODO("You need to look up the correct boxes for this to work")
+                var boxAboveOrLeft: StudentBox?
+                var boxBelowOrRight: StudentBox?
+                if (this.lineY == 0) {
+                    boxAboveOrLeft = null
+                }
+                if (this.lineY == mRows*2){
+                    boxBelowOrRight = null
+                }
             }
 
         override fun drawLine() {
-            TODO("Implement the logic for a player drawing a line. Don't forget to inform the listeners (fireGameChange, fireGameOver)")
+            //TODO("Implement the logic for a player drawing a line. Don't forget to inform the listeners (fireGameChange, fireGameOver)")
             // NOTE read the documentation in the interface, you must also update the current player.
+            this.isDrawn = true
+            fireGameChange()
+            if (turn%2 == 0){
+                currentPlayer = players[0]
+            } else {
+                currentPlayer = players[1]
+            }
         }
     }
 
