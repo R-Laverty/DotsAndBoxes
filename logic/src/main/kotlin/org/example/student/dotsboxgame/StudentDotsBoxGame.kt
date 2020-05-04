@@ -21,8 +21,8 @@ class StudentDotsBoxGame(columns: Int = 8, rows: Int = 8, players: List<Player> 
         MutableSparseMatrix(columns+1, (rows*2)+1, ::StudentLine,
                             {x,y -> !(y%2==0 && x==columns)})//TODO("Create a matrix initialized with your own line type")
 
-    override val isFinished: Boolean
-        get() = TODO("Provide this getter. Note you can make it a var to do so")
+    override var isFinished: Boolean = false
+        //get() = TODO("Provide this getter. Note you can make it a var to do so")
 
     override fun playComputerTurns() {
         var current = currentPlayer
@@ -83,6 +83,7 @@ class StudentDotsBoxGame(columns: Int = 8, rows: Int = 8, players: List<Player> 
             if (boxes.filter { it.owningPlayer == null }.count() == 0){
                 val scores = getScores().mapIndexed{index, score -> Pair(players[index], score)}
                 fireGameOver(scores)
+                isFinished = true
             }
             if (changePlayer) {
                 if (currentPlayer == players[0]) {
