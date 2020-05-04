@@ -16,7 +16,9 @@ class StudentDotsBoxGame(columns: Int = 8, rows: Int = 8, players: List<Player> 
     // NOTE: you may want to me more specific in the box type if you use that type in your class
     override val boxes: Matrix<DotsAndBoxesGame.Box> = MutableMatrix(columns, rows, ::StudentBox)//TODO("Create a matrix initialized with your own box type")
 
-    override val lines: SparseMatrix<DotsAndBoxesGame.Line> = MutableSparseMatrix(rows, columns, ::StudentLine)//TODO("Create a matrix initialized with your own line type")
+    override val lines: SparseMatrix<DotsAndBoxesGame.Line> =
+        MutableSparseMatrix(columns+1, rows*2, ::StudentLine,
+                            {x,y -> !(y%2==0 && x==columns)})//TODO("Create a matrix initialized with your own line type")
 
     override val isFinished: Boolean
         get() = TODO("Provide this getter. Note you can make it a var to do so")
@@ -41,23 +43,27 @@ class StudentDotsBoxGame(columns: Int = 8, rows: Int = 8, players: List<Player> 
 
         override val adjacentBoxes: Pair<StudentBox?, StudentBox?>
             get()  {
-                if (lineY == 0){
-                    return Pair(null, StudentBox(lineX,lineY))
-                }else if (lineX == 0) {
-                    return Pair(null, StudentBox(lineX,(lineY - 1) / 2))
+                var boxLeftOrUp: StudentBox?
+                var boxRightOrDown: StudentBox?
+
+                if (lineY%2 == 0){
+                    boxLeftOrUp = StudentBox(lineX, (lineY-2)/2)
+                    boxRightOrDown = StudentBox(lineX, lineY/2)
                 }else{
-                    if (lineY % 2 == 0) {
-                        return Pair(
-                            StudentBox(lineX,(lineY - 2) / 2),
-                            StudentBox(lineX,lineY / 2)
-                                   )
-                    } else {
-                        return Pair(
-                            StudentBox(lineX - 1,(lineY - 1) / 2),
-                            StudentBox(lineX,(lineY - 1) / 2)
-                                   )
-                    }
+                    boxLeftOrUp = StudentBox(lineX-1, (lineY-1)/2)
+                    boxRightOrDown = StudentBox(lineX, (lineY-1)/2)
                 }
+                if (lineY == 0){
+                    boxLeftOrUp = null
+                }else if (lineX == 0 && lineY%2 != 0) {
+                    boxLeftOrUp = null
+                }
+                if (lineY == lines.maxHeight-1){
+                    boxRightOrDown = null
+                }else if (lineX == lines.maxWidth-1){
+                    boxRightOrDown = null
+                }
+                return Pair(boxRightOrDown,boxLeftOrUp)
             }//TODO("You need to look up the correct boxes for this to work")
 
         override fun drawLine() {

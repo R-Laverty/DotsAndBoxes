@@ -16,17 +16,14 @@ class GameView:View {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :
             super(context, attrs, defStyleAttr)
 
-    private var mStudentDotsBoxGame: StudentDotsBoxGame = StudentDotsBoxGame(8,8)
-    private val colCount = mStudentDotsBoxGame.mColumns
-    private val rowCount = mStudentDotsBoxGame.mRows
-
     private var mBackgroundPaint: Paint
     private var mLineNotDrawnPaint: Paint
     private var mDrawnLinePaint: Paint
     private var mPlayer1BoxPaint: Paint
     private var mPlayer2BoxPaint: Paint
 
-    private val myGestureDetector = GestureDetector (context, myGestureListener())
+    var colCount = 3
+    var rowCount = 3
 
     init {
         mBackgroundPaint = Paint().apply {
@@ -87,29 +84,6 @@ class GameView:View {
                                     verticalLineBottom, paint)
                 }
             }
-        }
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        return myGestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
-    }
-    inner class myGestureListener: GestureDetector.SimpleOnGestureListener() {
-        override fun onDown(e: MotionEvent): Boolean {
-            return true
-        }
-
-        override fun onSingleTapUp(e: MotionEvent): Boolean {
-            val horizontalsColWidth = (width-70) / colCount
-            var horizontalColTouch = (e.x.toInt()-35)/horizontalsColWidth
-
-            val verticalsColWidth = width / (colCount+1)
-            var verticalColTouch = e.x.toInt()/verticalsColWidth
-
-            var horizontalsRowTouch = e.y.toInt() / verticalsColWidth
-            var verticalsRowTouch = (e.y.toInt()-35) / horizontalsColWidth
-
-            println("$horizontalColTouch,$horizontalsRowTouch / $verticalColTouch,$verticalsRowTouch")
-            return true
         }
     }
 }
