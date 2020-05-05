@@ -8,11 +8,14 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import org.example.student.dotsboxgame.StudentDotsBoxGame
 import org.junit.runner.Computer
 import uk.ac.bournemouth.ap.dotsandboxeslib.ComputerPlayer
+import uk.ac.bournemouth.ap.dotsandboxeslib.DotsAndBoxesGame
 import uk.ac.bournemouth.ap.dotsandboxeslib.HumanPlayer
 import uk.ac.bournemouth.ap.dotsandboxeslib.Player
+import kotlin.math.floor
 
 class GameView:View {
     constructor(context: Context?) : super(context)
@@ -27,6 +30,9 @@ class GameView:View {
     private var mPlayer2BoxPaint: Paint
     private var mUnownedBoxPaint: Paint
     private var mGame = StudentDotsBoxGame(5,5)
+    private val myGestureDetector = GestureDetector (context, myGestureListener())
+    private val columns = mGame.boxes.maxWidth
+    private val rows = mGame.boxes.maxHeight
 
     init {
         mBackgroundPaint = Paint().apply {
@@ -59,16 +65,16 @@ class GameView:View {
         super.onDraw(canvas)
 
         val chosenLineWidth: Float
-        var paint: Paint
         val viewWidth: Float = width.toFloat()
         val viewHeight: Float = height.toFloat()
-        val columns = mGame.boxes.maxWidth
-        val spaceBetweenBoxes = 10*columns-1
+
 
         chosenLineWidth = (viewWidth - 20*(columns+1))/columns
 
+        //draw background
         canvas.drawRect(0.toFloat(), 0.toFloat(), viewWidth, viewHeight, mBackgroundPaint)
 
+        //draw boxes
         for(box in mGame.boxes){
             var boxLeft = 20*(box.boxX+1) + chosenLineWidth*box.boxX
             var boxRight = boxLeft + chosenLineWidth
@@ -86,6 +92,7 @@ class GameView:View {
 
             canvas.drawRect(boxLeft, boxTop, boxRight, boxBottom, boxPaint)
         }
+        //draw lines
         for(line in mGame.lines){
             var lineLeft: Float
             var lineRight: Float
@@ -110,6 +117,57 @@ class GameView:View {
             }
 
             canvas.drawRect(lineLeft, lineTop, lineRight, lineBottom, linePaint)
+        }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return myGestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+
+    inner class myGestureListener: GestureDetector.SimpleOnGestureListener(){
+        override fun onDown(e: MotionEvent): Boolean {
+            return true
+        }
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            var x = e.x
+            var y = e.y
+
+            var detectionZone = width/columns
+            var boxPressedX = floor(x/detectionZone)
+            var boxPressedY = floor(y/detectionZone)
+
+            x = x - detectionZone*boxPressedX
+            y = y - detectionZone*boxPressedY
+
+            var yx = y+x
+
+            if (y>x){
+                if (yx < detectionZone){
+                    //lne left of box
+                    x = boxPressedX
+                    y = boxPressedY*2+1
+                }else if (yx > detectionZone){
+                    //line below box
+                    x = boxPressedX
+                    y = (boxPressedY+1)*2
+                }
+            }else if (y<x){
+                if (yx < detectionZone){
+                    //line above box
+                    x = boxPressedX
+                    y = boxPressedY*2
+                }else if (yx > detectionZone){
+                    //line right of box
+                    x = boxPressedX+1
+                    y = boxPressedY*2+1
+                }
+            }
+
+            try {
+                mGame.lines[x.toInt(),y.toInt()].drawLine()
+                invalidate()
+            }catch (e: java.lang.Exception){}
+            return true
         }
     }
 }
