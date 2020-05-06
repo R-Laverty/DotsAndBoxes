@@ -33,7 +33,7 @@ interface DotsAndBoxesGame {
      * The currently active player. Note that any implementation will need to change this as the
      * turns go, but the code accessing the game should not be able to change this directly.
      */
-    val currentPlayer: Player
+    var currentPlayer: Player
 
     /**
      * Determines whether the game has finished. [getScores] can then be used to determine the winner
