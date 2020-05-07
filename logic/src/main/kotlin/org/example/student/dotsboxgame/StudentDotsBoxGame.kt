@@ -11,7 +11,7 @@ import kotlin.random.Random
 class StudentDotsBoxGame(columns: Int = 8, rows: Int = 8, players: List<Player> =
     listOf(HumanPlayer(), HumanPlayer())) : AbstractDotsAndBoxesGame() {
 
-    override val players: List<Player> = players.toList()
+    override var players: List<Player> = players.toList()
 
     override var currentPlayer: Player = players[0]
 

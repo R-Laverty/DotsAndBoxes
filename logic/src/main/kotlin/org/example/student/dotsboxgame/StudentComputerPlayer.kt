@@ -26,7 +26,8 @@ class StudentComputerPlayer : ComputerPlayer() {
             when (boxes.boundingLines.filter { it.isDrawn }.count()) {
                 3 -> highPriorityBoxes = highPriorityBoxes.plus(boxes)
                 2 -> lowestPriorityBoxes = lowestPriorityBoxes.plus(boxes)
-                1,0 -> medPriorityBoxes = medPriorityBoxes.plus(boxes)
+                1 -> medPriorityBoxes = medPriorityBoxes.plus(boxes)
+                0 -> lowPriorityBoxes = lowPriorityBoxes.plus(boxes)
             }
         }
 
